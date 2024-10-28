@@ -1,0 +1,84 @@
+
+Cấu trúc cơ bản của Back-End sử dụng NestJS
+
+src/
+│
+├── auth/                    // Xử lý xác thực và bảo mật
+│   ├── auth.controller.ts    // Xử lý các yêu cầu liên quan đến đăng nhập, đăng ký
+│   ├── auth.module.ts        // Module liên quan đến auth
+│   ├── auth.service.ts       // Dịch vụ xử lý logic xác thực
+│   └── jwt.strategy.ts       // Cấu hình JWT để bảo vệ các route
+│
+├── chat/                    // Xử lý chức năng chính của chat
+│   ├── chat.controller.ts    // Xử lý các yêu cầu HTTP và WebSocket liên quan đến chat
+│   ├── chat.gateway.ts       // Xử lý WebSocket (Socket.io) cho kết nối thời gian thực
+│   ├── chat.module.ts        // Module cho tính năng chat
+│   ├── chat.service.ts       // Dịch vụ chứa logic chat, xử lý lưu trữ tin nhắn
+│   └── dto/                  // Các DTO dùng cho truyền dữ liệu
+│       └── create-message.dto.ts
+│
+├── users/                   // Quản lý người dùng
+│   ├── users.controller.ts   // Xử lý các yêu cầu liên quan đến người dùng (thông tin, danh sách)
+│   ├── users.module.ts       // Module của người dùng
+│   ├── users.service.ts      // Dịch vụ quản lý người dùng
+│   └── user.entity.ts        // Định nghĩa User entity (dùng cho database)
+│
+├── common/                  // Các thành phần dùng chung
+│   ├── decorators/           // Các decorator tùy chỉnh (ví dụ: Roles)
+│   ├── filters/              // Các filter xử lý lỗi chung
+│   └── pipes/                // Các pipe xử lý dữ liệu đầu vào
+│
+├── app.module.ts            // Module gốc của ứng dụng
+└── main.ts                  // File khởi động ứng dụng
+
+
+Cấu trúc trên giúp ứng dụng chat có thể quản lý tốt các tính năng cơ bản như:
+
+Đăng nhập/xác thực người dùng.
+Chat thời gian thực bằng WebSocket.
+Lưu trữ và quản lý tin nhắn, người dùng.
+
+
+----------------------------------------------------------------------------------------
+
+Cấu trúc tổng thể của Front-end sử dụng Angular
+
+src/
+│
+├── app/                         // Module chính của ứng dụng
+│   ├── auth/                    // Module xử lý xác thực người dùng
+│   │   ├── auth.component.ts       // Giao diện đăng nhập/đăng ký
+│   │   ├── auth.service.ts         // Service xử lý xác thực người dùng
+│   │   ├── auth.guard.ts           // Guard bảo vệ các route cần xác thực
+│   │   └── auth.module.ts          // Module xác thực
+│   │
+│   ├── chat/                    // Module chức năng chat
+│   │   ├── chat.component.ts       // Giao diện chính của chat
+│   │   ├── chat.service.ts         // Service xử lý logic của chat và kết nối WebSocket
+│   │   ├── message.model.ts        // Định nghĩa cấu trúc tin nhắn
+│   │   └── chat.module.ts          // Module chat
+│   │
+│   ├── user/                    // Module quản lý thông tin người dùng
+│   │   ├── user-profile.component.ts // Giao diện hồ sơ người dùng
+│   │   ├── user.service.ts          // Service quản lý thông tin người dùng
+│   │   └── user.module.ts           // Module người dùng
+│   │
+│   ├── shared/                  // Các thành phần tái sử dụng
+│   │   ├── models/                 // Các model dùng chung (User, Message)
+│   │   ├── components/             // Các component dùng chung (Button, Loader)
+│   │   └── pipes/                  // Các pipe xử lý dữ liệu
+│   │
+│   ├── app-routing.module.ts     // Cấu hình routing
+│   ├── app.component.ts          // Component gốc
+│   └── app.module.ts             // Module gốc của ứng dụng
+│
+├── assets/                      // Thư mục chứa các tài nguyên như hình ảnh, CSS, v.v.
+│
+└── environments/                // Các cấu hình môi trường (development, production)
+
+
+Tóm tắt chức năng
+Xác thực (Auth): Đăng nhập, đăng ký, và bảo vệ các route bằng JWT.
+Chat thời gian thực (Chat): Gửi và nhận tin nhắn bằng WebSocket.
+Quản lý người dùng (User): Cung cấp hồ sơ và thông tin cá nhân của người dùng.
+Các thành phần dùng chung (Shared): Bao gồm các models và components tái sử dụng.
