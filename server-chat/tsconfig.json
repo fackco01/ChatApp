@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+   //"rootDir": "./src",
+
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -17,5 +19,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+
+  //"include": ["src/**/*.ts", "db/**/*.ts"],  // Bao gồm cả file trong db
 }

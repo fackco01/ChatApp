@@ -1,23 +1,26 @@
+// app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ChatController } from './chat/chat.controller';
-import { ChatService } from './chat/chat.service';
 import { ChatModule } from './chat/chat.module';
 import { ConfigModule } from '@nestjs/config';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { dataSourceOptions } from '../db/data-local';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [ChatModule,
+  imports: [
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production',
+    }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
     }),
-    AuthModule
+    //TypeOrmModule.forRoot(dataSourceOptions),
+    PrismaModule,
+    AuthModule,
+    ChatModule,
   ],
-  controllers: [AppController, ChatController, AuthController],
-  providers: [AppService, ChatService, AuthService],
 })
 export class AppModule {}
