@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Role } from './role.entity';
 
@@ -20,7 +27,7 @@ export class Auth extends BaseEntity {
   @Column({ type: 'integer' })
   public roleId!: number;
 
-  @ManyToOne(() => Role, role => role.auths)
+  @ManyToOne(() => Role, (role) => role.auths)
   @JoinColumn({ name: 'roleId' })
   public role!: Role;
 }
