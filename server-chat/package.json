@@ -39,6 +39,9 @@
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@darraghor/eslint-plugin-nestjs-typed": "^5.0.27",
     "@nestjs/common": "^10.0.0",

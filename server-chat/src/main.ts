@@ -34,4 +34,5 @@ async function bootstrap() {
 bootstrap().catch((err) => {
   fs.writeFileSync('graph.json', PartialGraphHost.toString() ?? '');
   process.exit(1);
+  console.log(err);
 });
