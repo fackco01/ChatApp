@@ -14,7 +14,7 @@ import { PrismaModule } from '../../prisma/prisma.module';
       signOptions: { expiresIn: '1d' },
     }),
     //TypeOrmModule.forFeature([Auth, Role]),
-    PrismaModule
+    PrismaModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, CustomJwtService],
