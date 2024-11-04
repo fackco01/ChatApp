@@ -82,3 +82,9 @@ Xác thực (Auth): Đăng nhập, đăng ký, và bảo vệ các route bằng 
 Chat thời gian thực (Chat): Gửi và nhận tin nhắn bằng WebSocket.
 Quản lý người dùng (User): Cung cấp hồ sơ và thông tin cá nhân của người dùng.
 Các thành phần dùng chung (Shared): Bao gồm các models và components tái sử dụng.
+
+----------------------------------------
+Tutorial:
+1. Chạy npm run prisma:generate để tạo Prisma client
+2. Chạy npm run prisma:migrate để tạo và áp dụng migrations
+3. Chạy npm run prisma:seed nếu bạn muốn chạy seeding riêng
