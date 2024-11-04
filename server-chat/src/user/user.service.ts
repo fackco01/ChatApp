@@ -1,6 +1,16 @@
-import { Injectable, ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateUserRequestDto, GetUsersQueryDto, UserResponseDto, UsersPageResponseDto } from './dto/user.dto';
+import {
+  CreateUserRequestDto,
+  GetUsersQueryDto,
+  UserResponseDto,
+  UsersPageResponseDto,
+} from './dto/user.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -19,14 +29,14 @@ export class UserService {
               username: data.username,
               password: data.password, // Lưu ý: Cần hash password trước khi lưu
               roleId: data.roleId || 2, // Sử dụng roleId từ input hoặc mặc định là 2
-            }
-          }
+            },
+          },
         },
         include: {
           auth: {
-            select: { roleId: true }
-          }
-        }
+            select: { roleId: true },
+          },
+        },
       });
 
       return new UserResponseDto({
@@ -35,7 +45,7 @@ export class UserService {
         fullName: newUser.name,
         createdAt: newUser.createdAt,
         updatedAt: newUser.updatedAt,
-        roleId: newUser.auth.roleId
+        roleId: newUser.auth.roleId,
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -56,9 +66,9 @@ export class UserService {
       const whereCondition: Prisma.UserWhereInput = {
         OR: search
           ? [
-            { username: { contains: search, mode: 'insensitive' } },
-            { name: { contains: search, mode: 'insensitive' } },
-          ]
+              { username: { contains: search, mode: 'insensitive' } },
+              { name: { contains: search, mode: 'insensitive' } },
+            ]
           : undefined,
         auth: roleId ? { roleId } : undefined,
       };
@@ -78,14 +88,17 @@ export class UserService {
         throw new NotFoundException('No users found');
       }
 
-      const data = users.map(user => new UserResponseDto({
-        id: user.id,
-        username: user.username,
-        fullName: user.name,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        roleId: user.auth.roleId
-      }));
+      const data = users.map(
+        (user) =>
+          new UserResponseDto({
+            id: user.id,
+            username: user.username,
+            fullName: user.name,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            roleId: user.auth.roleId,
+          }),
+      );
 
       return new UsersPageResponseDto({ data, total, page, limit });
     } catch (error) {
