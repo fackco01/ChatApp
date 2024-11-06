@@ -67,9 +67,10 @@ export class CustomJwtService {
   async validateUser(decoded: any) {
     try {
       return await this.prisma.auth.findUnique({
-        where:{
-          id: decoded.id
-        }});
+        where: {
+          id: decoded.id,
+        },
+      });
     } catch (e) {
       this.logger.error(`Token verification failed: ${e}`);
       throw new UnauthorizedException('Invalid token');

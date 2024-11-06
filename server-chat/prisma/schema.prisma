@@ -13,21 +13,89 @@ datasource db {
   url      = env("DB_URL")
 }
 
-model Auth {
-  id       String @id @default(uuid())
-  username String @unique
-  password String
-  name     String
-  roleId   Int
-  role     Role   @relation(fields: [roleId], references: [roleId])
-
-  @@map("auths")
-}
-
 model Role {
-  roleId   Int    @id @default(autoincrement())
+  roleId   Int    @id
   roleName String @db.VarChar(255)
   auths    Auth[]
 
   @@map("roles")
+}
+
+model Auth {
+  id       String    @id @default(uuid())
+  username String @unique
+  password String
+  roleId   Int
+  role     Role   @relation(fields: [roleId], references: [roleId])
+  user     User?
+
+  @@map("auths")
+}
+
+model User {
+  id        String      @id
+  username  String   @unique
+  name      String
+  auth      Auth     @relation(fields: [id], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // New relations for chat
+  sentMessages     Message[]
+  chatRooms        ChatRoomParticipant[]
+  readMessages     ReadMessage[]
+
+  @@map("users")
+}
+
+
+// New models for chat functionality
+
+model ChatRoom {
+  id          String   @id @default(uuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  participants ChatRoomParticipant[]
+  messages     Message[]
+
+  @@map("chat_rooms")
+}
+
+model ChatRoomParticipant {
+  id         String   @id @default(uuid())
+  userId     String
+  chatRoomId String
+  joinedAt   DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+
+  @@unique([userId, chatRoomId])
+  @@map("chat_room_participants")
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  senderId   String
+  chatRoomId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  sender     User     @relation(fields: [senderId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  readBy     ReadMessage[]
+
+  @@map("messages")
+}
+
+model ReadMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  messageId String
+  readAt    DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  message   Message  @relation(fields: [messageId], references: [id])
+
+  @@unique([userId, messageId])
+  @@map("read_messages")
 }

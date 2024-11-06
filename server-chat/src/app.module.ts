@@ -3,10 +3,9 @@ import { Module } from '@nestjs/common';
 import { ChatModule } from './chat/chat.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from '../db/data-local';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { PrismaModule } from '../prisma/prisma.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -21,6 +20,7 @@ import { PrismaModule } from '../prisma/prisma.module';
     PrismaModule,
     AuthModule,
     ChatModule,
+    UserModule,
   ],
 })
 export class AppModule {}

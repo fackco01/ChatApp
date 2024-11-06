@@ -13,19 +13,10 @@ async function bootstrap() {
     abortOnError: false, // <--- THIS
   });
   app.useGlobalFilters(new AllExceptionsFilter());
+  // app.use(passport.initialize());
 
   // Enable CORS nếu cần
   app.enableCors();
-
-  // Add ValidationPipe
-  // app.useGlobalPipes(new ValidationPipe({
-  //   whitelist: true,
-  //   transform: true,
-  //   forbidNonWhitelisted: true,
-  //   transformOptions: {
-  //     enableImplicitConversion: true,
-  //   },
-  // }));
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(process.env.PORT ?? 3231);
@@ -34,4 +25,5 @@ async function bootstrap() {
 bootstrap().catch((err) => {
   fs.writeFileSync('graph.json', PartialGraphHost.toString() ?? '');
   process.exit(1);
+  console.log(err);
 });
