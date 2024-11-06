@@ -18,31 +18,44 @@ export class ChatService {
   constructor(private prisma: PrismaService) {}
 
   //Create new chat room
-  async createChatRoom(data: CreateChatRoomDto): Promise<ChatRoomResponseDto> {
+  async createChatRoom(
+    data: CreateChatRoomDto,
+    creatorUser: string,
+  ): Promise<ChatRoomResponseDto> {
     try {
+      // Lấy thông tin của người tạo
+      const creator = await this.prisma.user.findUnique({
+        where: { username: creatorUser },
+      });
+
+      if (!creator) {
+        throw new InternalServerErrorException('User not found');
+      }
+      // Kết hợp người tạo với các người tham gia khác (nếu có)
+      const allParticipantUsernames = [creatorUser, ...(data.additionalParticipantUsernames || [])];
       // Kiểm tra xem tất cả users có tồn tại không
       const users = await this.prisma.user.findMany({
         where: {
           username: {
-            in: data.participantUsernames,
+            in: allParticipantUsernames,
           },
         },
       });
 
-      if (users.length !== data.participantUsernames.length) {
+      if (users.length !== allParticipantUsernames.length) {
         throw new BadRequestException('One or more users do not exist');
       }
 
       // Nếu tất cả users tồn tại, tiếp tục tạo chat room
 
-      if (
-        !data.participantUsernames ||
-        !Array.isArray(data.participantUsernames)
-      ) {
-        throw new BadRequestException(
-          'participantIds must be an array of UUIDs',
-        );
-      }
+      // if (
+      //   !data.participantUsernames ||
+      //   !Array.isArray(data.participantUsernames)
+      // ) {
+      //   throw new BadRequestException(
+      //     'participantIds must be an array of UUIDs',
+      //   );
+      // }
 
       const chatRoom = await this.prisma.chatRoom.create({
         data: {
@@ -119,7 +132,9 @@ export class ChatService {
   }
 
   //Create Messenger
-  async createMessage(data: CreateMessageDto): Promise<MessageResponseDto> {
+  async createMessage(
+    data: CreateMessageDto & { senderId: string },
+  ): Promise<MessageResponseDto> {
     try {
       const participant = await this.prisma.chatRoomParticipant.findUnique({
         where: {

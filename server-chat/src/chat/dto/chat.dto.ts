@@ -26,7 +26,8 @@ export class CreateChatRoomDto {
   })
   @IsArray()
   @IsString({ each: true })
-  participantUsernames: string[];
+  @IsOptional()
+  additionalParticipantUsernames?: string[];
 }
 
 export class ChatRoomResponseDto {
@@ -56,10 +57,10 @@ export class CreateMessageDto {
   @ApiProperty()
   content: string;
 
-  @IsNotEmpty()
-  @IsUUID('4')
-  @ApiProperty()
-  senderId: string;
+  // @IsNotEmpty()
+  // @IsUUID('4')
+  // @ApiProperty()
+  // senderId: string;
 
   @IsNotEmpty()
   @IsUUID('4')
