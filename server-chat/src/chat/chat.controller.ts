@@ -26,7 +26,7 @@ import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @ApiTags('Chat')
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('access-token')
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
@@ -36,8 +36,10 @@ export class ChatController {
   @ApiResponse({ status: 201, type: ChatRoomResponseDto })
   async createChatRoom(
     @Body() createChatRoomDto: CreateChatRoomDto,
+    @Req() req,
   ): Promise<ChatRoomResponseDto> {
-    return this.chatService.createChatRoom(createChatRoomDto);
+    const user = req.user.username;
+    return this.chatService.createChatRoom(createChatRoomDto, user);
   }
 
   @Get('rooms/:id')
@@ -61,11 +63,13 @@ export class ChatController {
 
   //Message Endpoints
   @Post('messages')
-  @ApiOperation({ summary: 'Get all messages from chat' })
-  @ApiResponse({ status: 200, type: MessageResponseDto })
+  @ApiOperation({ summary: 'Create a new message' })
+  @ApiResponse({ status: 201, type: MessageResponseDto })
   async createMessage(
-    @Body() messageDto: CreateMessageDto,
+    @Req() req,
+    @Body() messageDto: Omit<CreateMessageDto, 'senderId'>,
   ): Promise<MessageResponseDto> {
-    return this.chatService.createMessage(messageDto);
+    const senderId = req.user.sub;
+    return this.chatService.createMessage({ ...messageDto, senderId });
   }
 }

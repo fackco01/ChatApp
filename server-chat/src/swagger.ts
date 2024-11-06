@@ -10,20 +10,18 @@ async function bootstrap() {
     .setDescription('The Chat Application API description')
     .setVersion('1.0')
     .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'Enter JWT token',
-        in: 'header',
-      },
-      'JWT-auth',
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token', // Đặt một tên duy nhất cho security scheme
     )
+    //.addBearerAuth()
     .build();
 
   // Enable CORS nếu cần
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, {
@@ -35,6 +33,6 @@ async function bootstrap() {
 
   await app.listen(3231);
   console.log('Swagger documentation is running on http://localhost:3231/api');
-  //await open('http://localhost:3231/api');
+  await open('http://localhost:3231/api');
 }
 bootstrap();
